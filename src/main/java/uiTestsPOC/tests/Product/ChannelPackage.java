@@ -37,7 +37,7 @@ public class ChannelPackage extends BrowserExtensions {
 
     // Prepare for edit
     commonHelperMethods.selectPropertyForSearching("Id");
-    commonHelperMethods.enterValueInSearchField("29");
+    commonHelperMethods.toolbarSearch("29");
     commonHelperMethods.ToolbarButtonClick("Search");
 
     commonHelperMethods.ToolbarButtonClick("Edit Channel Package");

@@ -3,7 +3,6 @@ package utils;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
-
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -47,7 +46,7 @@ public class CommonMethods extends BrowserExtensions {
     ToolbarButtonClick(propertyName);
   }
 
-  public void enterValueInSearchField(String valueForSearch) {
+  public void toolbarSearch(String valueForSearch) {
     WebElement searchField = driver.findElement(By.xpath("//input[@placeholder]"));
     waitToBeClickable(searchField);
     try {
@@ -60,7 +59,7 @@ public class CommonMethods extends BrowserExtensions {
   }
 
   public void fillRowInfo(String elementName, String data) {
-    WebElement element = rowForInput(elementName);
+    WebElement element = elements.rowForInput(elementName, getElementIndex(elementName));
     waitToBeClickable(element);
     element.click();
 
@@ -70,16 +69,31 @@ public class CommonMethods extends BrowserExtensions {
       element.sendKeys(data + Keys.ENTER);
     }
   }
+  
+  public void searchForItem(String searchValue) {  
+    try {
+      Thread.sleep(200);
+    } catch (InterruptedException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    WebElement element =  driver.findElement(elements.searchInput());
+   
+    waitToBeClickable(element); 
+    element.sendKeys(searchValue);  
+    waitForElements(elements.dropdownElements(),5);
+    try {
+      Thread.sleep(600);
+    } catch (InterruptedException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    
+  }  
 
   // For single selection
-  public void selectAnELementFromDropdown(String rowName, String values) {
-    WebElement parentRow = rowForInput(rowName);
-    waitToBeClickable(parentRow);
-    parentRow.click();
-    WebElement arrow = parentRow.findElement(elements.dropdownArrow());
-    waitToBeClickable(arrow);
-
-    parentRow.findElement(elements.dropdownArrow()).click();
+  public void selectAnELementFromDropdown(String values) { 
+    
     List<WebElement> list = driver.findElements(elements.dropdownElements());
     for (int i = 0; i < list.size(); i++) {
       String eleText = list.get(i).getText();
@@ -92,13 +106,8 @@ public class CommonMethods extends BrowserExtensions {
   }
 
   // For multi selection
-  public void selectAnELementFromDropdown(String rowName, List<String> values) {
-    WebElement parentRow = rowForInput(rowName);
-    waitToBeClickable(parentRow);
-    parentRow.click();
-    WebElement arrow = parentRow.findElement(elements.dropdownArrow());
-    waitToBeClickable(arrow);
-    parentRow.findElement(elements.dropdownArrow()).click();
+  public void selectAnELementFromDropdown(List<String> values) {
+    
     List<WebElement> list = driver.findElements(elements.dropdownElements());
 
     for (int t = 0; t < values.size(); t++) {
@@ -113,16 +122,24 @@ public class CommonMethods extends BrowserExtensions {
       }
     }
   }
+  public void openDropdown(String rowName) {
+    WebElement parentRow = elements.rowForInput(rowName, getElementIndex(rowName));
+    waitToBeClickable(parentRow);
+    parentRow.click();
+    WebElement arrow = parentRow.findElement(elements.dropdownArrow());
+    waitToBeClickable(arrow);
+    parentRow.findElement(elements.dropdownArrow()).click();
+  }
 
   // Verify methods
   public void verifyCreatedItem(String property) {
-    String value = rowForInput(property).getText();
+    String value = elements.rowForInput(property, getElementIndex(property)).getText();
     Assert.assertTrue(!value.equals(""));
   }
 
   public void verifyEditedItem() {
-    String updateOnDate = rowForInput("Updated On").getText();
-    String updatedBy = rowForInput("Updated By").getText();
+    String updateOnDate = elements.rowForInput("Updated On", getElementIndex("Updated On")).getText();
+    String updatedBy = elements.rowForInput("Updated By", getElementIndex("Updated By")).getText();
     updateOnDate = updateOnDate.substring(0, updateOnDate.length() - 3);
     String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(Calendar.getInstance().getTime());
     Assert.assertTrue(updateOnDate.equals(timeStamp));
@@ -142,10 +159,12 @@ public class CommonMethods extends BrowserExtensions {
     Assert.assertTrue(!propertyBefore.equals(propertyAfter));
   }
 
+  // Helper string and integer methods
+
   public String getGridPropety(String property) {
     String propertyText = "";
     try {
-      propertyText = gridFirstRow(property).getText();
+      propertyText = elements.gridFirstRow(property, getElementIndex(property)).getText();
     } catch (Exception e) {
 
     }
@@ -153,6 +172,7 @@ public class CommonMethods extends BrowserExtensions {
   }
 
   public Integer numberOfGridRows() {
+
     List<WebElement> elements = null;
     Integer size = 0;
 
@@ -168,25 +188,7 @@ public class CommonMethods extends BrowserExtensions {
     return size;
   }
 
-  private WebElement rowForInput(String elementName) {
-    List<WebElement> elements = driver.findElements(By.xpath("//div[@class='ht_master handsontable']//tbody//td"));
-    WebElement element = elements.get(GetElementIndex(elementName));
-    return element;
-  }
-
-  private WebElement gridFirstRow(String elementName) {
-    List<WebElement> elements;
-    WebElement element = null;
-    try {
-      elements = driver.findElements(By.xpath("(//div[@class='ht_master handsontable']//tbody/tr)[1]/td"));
-      element = elements.get(GetElementIndex(elementName));
-    } catch (Exception e) {
-
-    }
-    return element;
-  }
-
-  private Integer GetElementIndex(String elementName) {
+  private Integer getElementIndex(String elementName) {
 
     Integer elementIndex = 0;
     List<WebElement> elements = driver.findElements(By.xpath("//div[@class='ht_master handsontable']//thead//span"));
