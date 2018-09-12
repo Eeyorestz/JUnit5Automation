@@ -1,6 +1,8 @@
 package uiTestsPOC.tests.VOD;
 
 
+import java.util.Arrays;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -46,6 +48,36 @@ public class VODAssetTests extends BrowserExtensions {
     
     commonHelperMethods.openDropdown("TV Season"); 
     commonHelperMethods.selectAnELementFromDropdown("Yordan Test Season 1");
+    
+    
+    commonHelperMethods.fillRowInfo("Video Title", "Test Video Title");
+    commonHelperMethods.fillRowInfo("Original Title", "Test Original Title Name");
+    commonHelperMethods.fillRowInfo("Title Brief", "Test Brief Title");
+    commonHelperMethods.fillRowInfo("Title Brief", "Test Brief Title");
+    commonHelperMethods.fillRowInfo("Summary Short", "Test short summray");
+    commonHelperMethods.fillRowInfo("Summary Long", "Test long summray test long summray");
+    
+    //commonHelperMethods.fillRowInfo("Genres", "Test genre 1, Test genre 2, Test genre 3, Test genre 4");
+    commonHelperMethods.fillRowInfo("Actors", "Test actor 1, Test actor 2, Test actor 3, Test actor 4");
+    commonHelperMethods.fillRowInfo("Director", "Test Director");
+    commonHelperMethods.fillRowInfo("Country of Origin", "Test Country");
+    
+    commonHelperMethods.fillRowInfo("Content URL", url);
+    commonHelperMethods.fillRowInfo("Subtitle URL", url);
+    
+    commonHelperMethods.openDropdown("Tenants");  
+    commonHelperMethods.selectAnELementFromDropdown("AMB-LV");
+    
+    
+    //FEW Integer fields are missing here
+    
+    commonHelperMethods.openDropdown("VOD Type");  
+    commonHelperMethods.selectAnELementFromDropdown("SVOD");
+    
+    commonHelperMethods.openDropdown("VOD Packages"); 
+    commonHelperMethods.selectAnELementFromDropdown(Arrays.asList("AMB", "LT_VOD"));
+    
+    
     // Save info
     // commonHelperMethods.ToolbarButtonClick("Save");
 

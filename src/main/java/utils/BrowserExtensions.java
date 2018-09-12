@@ -30,7 +30,7 @@ public class BrowserExtensions extends PageBase {
   }
 
   public void waitToBeClickable(WebElement element) {
-    WebDriverWait wait2 = new WebDriverWait(driver, 20);
+    WebDriverWait wait2 = new WebDriverWait(driver, 5);
     wait2.until(ExpectedConditions.elementToBeClickable(element));
     JavascriptExecutor jse2 = (JavascriptExecutor) driver;
     jse2.executeScript("arguments[0].scrollIntoView()", element);

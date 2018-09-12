@@ -37,4 +37,9 @@ public class CommonWebElements extends BrowserExtensions{
   public By searchInput() {
     return By.xpath("//input[@type='search']");   
   }
+  
+  public WebElement day(String day) {
+    return driver.findElement(By.xpath("//td[contains(@class,'calendar')]/div[normalize-space(text()) = '"+day+"']")) ;   
+  }  
+
 }

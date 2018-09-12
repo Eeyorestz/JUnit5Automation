@@ -81,19 +81,24 @@ public class CommonMethods extends BrowserExtensions {
    
     waitToBeClickable(element); 
     element.sendKeys(searchValue);  
-    waitForElements(elements.dropdownElements(),5);
+  // waitForElements(elements.dropdownElements(),5);
     try {
       Thread.sleep(600);
-    } catch (InterruptedException e) {
+    } catch (Exception e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
     
-  }  
+  }
+  
 
   // For single selection
   public void selectAnELementFromDropdown(String values) { 
     
+    try {
+      Thread.sleep(200);
+    } catch (Exception e) {
+    }
     List<WebElement> list = driver.findElements(elements.dropdownElements());
     for (int i = 0; i < list.size(); i++) {
       String eleText = list.get(i).getText();
